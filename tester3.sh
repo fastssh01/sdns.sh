@@ -8,6 +8,12 @@ function endscript() {
 
 trap endscript 2 15
 
+echo -e "\e[1;37mEnter DNS IPs separated by ' ':\e[0m"
+read -a DNS_IPS
+
+echo -e "\e[1;37mEnter Your NameServers separated by ' ':\e[0m"
+read -a NAME_SERVERS
+
 DNS_IPS=("124.6.181.12" "124.6.181.4" "124.6.181.28" "112.198.115.60" "112.198.115.44" "112.198.115.36" "124.6.181.20")
 
 NAME_SERVERS=("sg2ray-dns.mainssh.com" "mine-ns.min3sacrifice.com")
