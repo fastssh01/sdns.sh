@@ -8,26 +8,6 @@ function endscript() {
 
 trap endscript 2 15
 
-# Associative array for caching DNS query results
-declare -A DNS_CACHE
-
-# Function to perform DNS query and handle caching
-perform_dns_query() {
-  local target="$1"
-  local di="$2"
-  local ns="$3"
-
-  # Check if result is already cached
-  if [ -n "${DNS_CACHE[$target,$di,$ns]}" ]; then
-    result="${DNS_CACHE[$target,$di,$ns]}"
-  else
-    # Perform DNS query
-    result=$(${_DIG} @${di} ${ns} +short)
-    # Cache the result
-    DNS_CACHE["$target,$di,$ns"]=$result
-  fi
-}
-
 echo -e "\e[1;37mEnter DNS IPs separated by ' ':\e[0m"
 read -a DNS_IPS
 
@@ -111,14 +91,21 @@ fi
 else
 PING_STATUS="${fail_color}Ping Failed${reset_color}"
 fi
-# Perform parallel DNS queries
-parallel_dns_queries "$TARGET_ADDRESS"
+  # Manual control for parallel DNS queries
+  if [ "$ENABLE_PARALLEL" = true ]; then
+    parallel_dns_queries "$TARGET_ADDRESS"
+  fi
 
-if [ -z "$result" ]; then
-  STATUS="${success_color}Success${reset_color}"
-else
-  STATUS="${fail_color}Failed${reset_color}"
-fi
+  # Manual control for caching
+  if [ "$ENABLE_CACHING" = true ]; then
+    perform_dns_query "target" "di" "ns"
+  fi
+
+  if [ -z "$result" ]; then
+    STATUS="${success_color}Success${reset_color}"
+  else
+    STATUS="${fail_color}Failed${reset_color}"
+  fi
   # Header
   echo -e "${border_color}┌──────────────────────────────────────────────┐${reset_color}"
   echo -e "${border_color}│${header_color}${padding}DNS Status Check Results${padding}${reset_color}"
