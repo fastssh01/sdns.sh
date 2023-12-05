@@ -24,6 +24,41 @@ DIG_EXEC="DEFAULT"
 CUSTOM_DIG=/data/data/com.termux/files/home/go/bin/fastdig
 VER=0.3
 
+# User prompt for DNS lookup tool choice
+echo -e "\e[1;37mChoose DNS lookup tool:\e[0m"
+echo -e "\e[1;37m1. Default (dig)\e[0m"
+echo -e "\e[1;37m2. host\e[0m"
+echo -e "\e[1;37m3. nslookup\e[0m"
+echo -e "\e[1;37m4. getent\e[0m"
+
+read -p "Enter your choice (1-4): " DNS_TOOL_CHOICE
+
+case "${DNS_TOOL_CHOICE}" in
+  1)
+    _DIG="$(command -v dig)"
+    ;;
+  2)
+    _DIG="$(command -v host)"
+    ;;
+  3)
+    _DIG="$(command -v nslookup)"
+    ;;
+  4)
+    _DIG="$(command -v getent)"
+    ;;
+  *)
+    echo "Invalid choice. Using default (dig)."
+    _DIG="$(command -v dig)"
+    ;;
+esac
+
+if [ ! $(command -v ${_DIG}) ]; then
+  printf "%b" "DNS lookup tool not found. Please install the required tool or check your choice.\n" && exit 1
+fi
+
+# ...
+
+
 case "${DIG_EXEC}" in
   DEFAULT|D)
     _DIG="$(command -v dig)"
