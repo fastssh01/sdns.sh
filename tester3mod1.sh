@@ -14,7 +14,8 @@ read -a DNS_IPS
 echo -e "\e[1;37mEnter Your NameServers separated by ' ':\e[0m"
 read -a NAME_SERVERS
 
-TARGET_ADDRESS="8.8.8.8"
+echo -e "\e[1;37mEnter Target DNS IP:\e[0m"
+read TARGET_ADDRESS
 
 LOOP_DELAY=5
 echo -e "\e[1;37mCurrent loop delay is \e[1;33m${LOOP_DELAY}\e[1;37m seconds.\e[0m"
