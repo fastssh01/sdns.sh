@@ -30,7 +30,7 @@ echo -e "\e[1;37m1. Default (dig)\e[0m"
 echo -e "\e[1;37m2. host\e[0m"
 echo -e "\e[1;37m3. nslookup\e[0m"
 
-read -p "Enter your choice (1-4): " DNS_TOOL_CHOICE
+read -p "Enter your choice (1-3): " DNS_TOOL_CHOICE
 
 case "${DNS_TOOL_CHOICE}" in
   1)
