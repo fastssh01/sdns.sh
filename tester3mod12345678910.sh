@@ -113,7 +113,7 @@ fi
 else
 PING_STATUS="${fail_color}Ping Failed${reset_color}"
 fi
-  # Manual control for parallel DNS queries
+# Manual control for parallel DNS queries
   if [ "$ENABLE_PARALLEL" = true ]; then
     parallel_dns_queries "$TARGET_ADDRESS"
   fi
