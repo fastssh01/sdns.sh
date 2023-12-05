@@ -9,8 +9,26 @@ function endscript() {
 trap endscript 2 15
 
 # Manually set configuration options
-ENABLE_PARALLEL=true  # Set to true to enable parallel querying or false to disable
-ENABLE_CACHING=true   # Set to true to enable caching or false to disable
+read -p "Enable parallel queries? (y/n): " ENABLE_PARALLEL_CHOICE
+read -p "Enable caching? (y/n): " ENABLE_CACHING_CHOICE
+
+case "${ENABLE_PARALLEL_CHOICE}" in
+  [Yy]*)
+    ENABLE_PARALLEL=true
+    ;;
+  *)
+    ENABLE_PARALLEL=false
+    ;;
+esac
+
+case "${ENABLE_CACHING_CHOICE}" in
+  [Yy]*)
+    ENABLE_CACHING=true
+    ;;
+  *)
+    ENABLE_CACHING=false
+    ;;
+esac
 
 echo -e "\e[1;37mEnter DNS IPs separated by ' ':\e[0m"
 read -a DNS_IPS
