@@ -115,45 +115,52 @@ fi
 count=1
 
 check(){
-  local border_color="\e[95m"  # Light magenta color
+  
   local success_color="\e[92m"  # Light green color
-  local fail_color="\e[91m"    # Light red color
-  local header_color="\e[96m"  # Light cyan color
-  local reset_color="\e[0m"    # Reset to default terminal color
-  local padding="  "            # Padding for aesthetic
+  local fail_color="\e[91m"     # Light red color
+  local reset_color="\e[0m"      # Reset to default terminal color
+  local padding="  "             # Padding for aesthetic
 
-# Manual control for parallel DNS queries
-  if [ "$ENABLE_PARALLEL" = true ]; then
-    parallel_dns_queries "$TARGET_ADDRESS"
-    if [ $? -eq 0 ]; then
-      PARALLEL_STATUS="${success_color}Success${reset_color}"
+  # Ping target address
+  ping_result=$(ping -c 1 ${TARGET_ADDRESS} 2>&1 | grep "transmitted")
+  if [ -n "$ping_result" ]; then
+    ping_time=$(ping -c 1 ${TARGET_ADDRESS} | awk -F'/' 'END {printf "%.0f", $5}')
+    if (( ping_time <= 500 )); then
+      PING_STATUS="${reset_color}Ping Time:${reset_color} \e[92m${ping_time} ms\e[0m"
     else
-      PARALLEL_STATUS="${fail_color}Error${reset_color}"
+      PING_STATUS="${reset_color}Ping Time:${reset_color} \e[91m${ping_time} ms\e[0m"
     fi
+  else
+    PING_STATUS="${fail_color}Ping Failed${reset_color}"
+  fi
+
+  # Manual control for parallel DNS queries
+  if [ "$ENABLE_PARALLEL" = true ]; then
+    parallel_dns_queries "$TARGET_ADDRESS" &>/dev/null
+    PARALLEL_STATUS="${success_color}Success${reset_color}"
+  else
+    PARALLEL_STATUS="${fail_color}Failed${reset_color}"
   fi
 
   # Manual control for caching
   if [ "$ENABLE_CACHING" = true ]; then
-    perform_dns_query "target" "di" "ns"
-    if [ $? -eq 0 ]; then
-      CACHING_STATUS="${success_color}Success${reset_color}"
-    else
-      CACHING_STATUS="${fail_color}Error${reset_color}"
-    fi
+    perform_dns_query "target" "di" "ns" &>/dev/null
+    CACHING_STATUS="${success_color}Success${reset_color}"
+  else
+    CACHING_STATUS="${fail_color}Failed${reset_color}"
   fi
 
-  # ... (existing code)
-
-  # Results
-  for DI in "${DNS_IPS[@]}"; do
-    for NS in "${NAME_SERVERS[@]}"; do
-      # ... (existing code)
-
-      echo -e "${border_color}│${padding}Status: ${STATUS}${padding}${reset_color}"
-      echo -e "${border_color}│${padding}${PING_STATUS}${padding}${reset_color}"
-      echo -e "${border_color}│${padding}Parallel DNS: ${PARALLEL_STATUS}${padding}${reset_color}"
-      echo -e "${border_color}│${padding}DNS Caching: ${CACHING_STATUS}${padding}${reset_color}"
-      echo -e "${border_color}├──────────────────────────────────────────────┤${reset_color}"
+  # Display the results
+  echo -e "${border_color}┌──────────────────────────────────────────────┐${reset_color}"
+  echo -e "${border_color}│${padding}Status: ${STATUS}${padding}${reset_color}"
+  echo -e "${border_color}│${padding}${PING_STATUS}${padding}${reset_color}"
+  echo -e "${border_color}│${padding}Parallel DNS: ${PARALLEL_STATUS}${padding}${reset_color}"
+  echo -e "${border_color}│${padding}DNS Caching: ${CACHING_STATUS}${padding}${reset_color}"
+  echo -e "${border_color}├──────────────────────────────────────────────┤${reset_color}"
+  echo -e "${border_color}│${padding}${header_color}Check count: ${count}${padding}${reset_color}"
+  echo -e "${border_color}│${padding}Loop Delay: ${LOOP_DELAY} seconds${padding}${reset_color}"
+  echo -e "${border_color}└──────────────────────────────────────────────┘${reset_color}"
+}
     done
   done
 
