@@ -122,6 +122,41 @@ check(){
   local reset_color="\e[0m"    # Reset to default terminal color
   local padding="  "            # Padding for aesthetic
 
+# Manual control for parallel DNS queries
+  if [ "$ENABLE_PARALLEL" = true ]; then
+    parallel_dns_queries "$TARGET_ADDRESS"
+    if [ $? -eq 0 ]; then
+      PARALLEL_STATUS="${success_color}Success${reset_color}"
+    else
+      PARALLEL_STATUS="${fail_color}Error${reset_color}"
+    fi
+  fi
+
+  # Manual control for caching
+  if [ "$ENABLE_CACHING" = true ]; then
+    perform_dns_query "target" "di" "ns"
+    if [ $? -eq 0 ]; then
+      CACHING_STATUS="${success_color}Success${reset_color}"
+    else
+      CACHING_STATUS="${fail_color}Error${reset_color}"
+    fi
+  fi
+
+  # ... (existing code)
+
+  # Results
+  for DI in "${DNS_IPS[@]}"; do
+    for NS in "${NAME_SERVERS[@]}"; do
+      # ... (existing code)
+
+      echo -e "${border_color}│${padding}Status: ${STATUS}${padding}${reset_color}"
+      echo -e "${border_color}│${padding}${PING_STATUS}${padding}${reset_color}"
+      echo -e "${border_color}│${padding}Parallel DNS: ${PARALLEL_STATUS}${padding}${reset_color}"
+      echo -e "${border_color}│${padding}DNS Caching: ${CACHING_STATUS}${padding}${reset_color}"
+      echo -e "${border_color}├──────────────────────────────────────────────┤${reset_color}"
+    done
+  done
+
 # Ping target address
 ping_result=$(ping -c 1 ${TARGET_ADDRESS} | grep "1 packets transmitted")
 if [ -n "$ping_result" ]; then
