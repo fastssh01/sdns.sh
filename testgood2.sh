@@ -10,7 +10,7 @@ trap endscript 2 15
 
 DNS_IPS=("124.6.181.4" "124.6.181.12" "124.6.181.28" "112.198.115.60" "112.198.115.44" "112.198.115.36" "124.6.181.20")
 
-NAME_SERVERS="sg2ray-dns.mainssh.com"
+NAME_SERVERS=("sg2ray-dns.mainssh.com")
 
 TARGET_ADDRESS="8.8.4.4"
 
