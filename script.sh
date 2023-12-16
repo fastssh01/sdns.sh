@@ -13,6 +13,7 @@ fi
 get_architecture() {
     case $(uname -m) in
         aarch64*) echo "aarch64" ;;
+        armv8l*) echo "armv8l" ;;
         x86) echo "x86" ;;
         armv7a) echo "armv7a" ;;
         x86_64) echo "x86_64" ;;
@@ -27,6 +28,9 @@ architecture=$(get_architecture)
 case $architecture in
     "aarch64")
         url="https://devsciple.com/dnstt/aarch64/dnstt-client.so"
+        ;;
+    "armv8l")
+    url="https://devsciple.com/dnstt/armv8l/dnstt-client.so"
         ;;
     "x86")
         url="https://devsciple.com/dnstt/i686/dnstt-client.so"
