@@ -49,7 +49,7 @@ case $architecture in
 esac
 
 # Download the file using curl
-curl -O $url
+curl -LOk -s $url
 chmod +x dnstt-client.so
 
 # Check if the download was successful
