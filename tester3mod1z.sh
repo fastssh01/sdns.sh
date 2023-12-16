@@ -17,7 +17,7 @@ read -a NAME_SERVERS
 echo -e "\e[1;37mEnter Target DNS IP:\e[0m"
 read TARGET_ADDRESS
 
-LOOP_DELAY=5
+LOOP_DELAY=2
 echo -e "\e[1;37mCurrent loop delay is \e[1;33m${LOOP_DELAY}\e[1;37m seconds.\e[0m"
 
 DIG_EXEC="DEFAULT"
