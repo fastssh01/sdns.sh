@@ -5,7 +5,7 @@ if [[ ! -e dnstt-client.so ]]; then
     yes| termux-setup-storage > /dev/null 2>&1
 else
     echo "SlowDNS Client already installed."
-    rm -f script.sh
+    rm -f script1.sh
     exit 1
 fi
 
@@ -43,7 +43,7 @@ case $architecture in
         ;;
       *)
         echo "Unsupported architecture: $architecture."
-        rm -f script.sh
+        rm -f script1.sh
         exit 1
         ;;
 esac
@@ -59,4 +59,4 @@ else
     echo "SlowDNS Client installation failed."
 fi
 
-rm -f script.sh
+rm -f script1.sh
