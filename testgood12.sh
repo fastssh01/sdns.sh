@@ -8,11 +8,11 @@ function endscript() {
 
 trap endscript 2 15
 
-DNS_IPS=("124.6.181.4" "124.6.181.12" "124.6.181.28" "112.198.115.60" "112.198.115.44" "112.198.115.36" "124.6.181.20")
+DNS_IPS=("124.6.181.4" "124.6.181.12" "124.6.181.28" "112.198.115.60" "112.198.115.44" "112.198.115.36" "124.6.181.44")
 
-NAME_SERVERS=("sg2ray-dns.mainssh.com")
+NAME_SERVERS=("sg2ray-dns.mainssh.com" "ns.sg1.tunnel.cx")
 
-TARGET_ADDRESS="8.8.4.4"
+TARGET_ADDRESS="8.8.8.8"
 
 LOOP_DELAY=2
 echo -e "\e[1;37mCurrent loop delay is \e[1;33m${LOOP_DELAY}\e[1;37m seconds.\e[0m"
